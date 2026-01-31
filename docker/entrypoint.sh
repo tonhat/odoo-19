@@ -10,6 +10,15 @@ shift || true
 : "${DB_PASSWORD:=odoo}"
 : "${DB_NAME:=odoo}"
 
+# Fail fast if core base data file is missing (common when the image was built
+# from an incomplete context or addons paths are wrong).
+if [ ! -f "/opt/odoo/odoo/addons/base/data/base_data.sql" ]; then
+  echo "ERROR: Missing /opt/odoo/odoo/addons/base/data/base_data.sql in container."
+  echo "Debug: printing odoo.addons search paths..."
+  python -c "import odoo.addons; import sys; print('sys.path='); print('  ' + '\n  '.join(sys.path)); print('odoo.addons.__path__='); print('  ' + '\n  '.join(list(odoo.addons.__path__)))" || true
+  exit 1
+fi
+
 db_is_initialized() {
   PGPASSWORD="$DB_PASSWORD" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" -Atc \
     "SELECT 1 FROM information_schema.tables WHERE table_schema='public' AND table_name='ir_module_module' LIMIT 1;" 2>/dev/null \
