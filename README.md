@@ -43,4 +43,26 @@ for details and get in touch with us via email.
 
 To enable Pages deployment, ensure the repository `main` branch is allowed to deploy and that the `docs/` folder contains your site content (there is an existing `docs/index.html`).
 
+## Docker
+
+- **Local run (docker compose)**:
+	- The `odoo` service uses `image: ${ODOO_IMAGE:-odoo-19:local}` and `build: .`.
+	- Run:
+		- `docker compose up -d --build`
+		- Open `http://localhost:8069`
+
+- **CI/CD (Docker)**:
+	- GitHub Actions workflow: `.github/workflows/docker.yml`
+	- Builds and smoke-tests the stack with `docker compose`.
+	- On pushes to `main` and tags like `v1.2.3`, pushes an image to GHCR:
+		- `ghcr.io/<owner>/<repo>:latest` (default branch)
+		- `ghcr.io/<owner>/<repo>:sha-...` and tag refs
+
+To run the GHCR image with compose:
+
+```bash
+export ODOO_IMAGE=ghcr.io/<owner>/<repo>:latest
+docker compose up -d --no-build
+```
+
 If you need me to push these workflow files to GitHub (or help fix SSH credentials), say so and I will run the commit + push.
