@@ -97,3 +97,25 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Job summary (where to click)
+        run: |
+          {
+            echo "## Docker image published"
+            echo
+            echo "**GHCR package:** https://github.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/pkgs/container/${{ github.event.repository.name }}"
+            echo
+            echo "**Tags pushed in this run:**"
+            echo
+            echo "\`${{ steps.meta.outputs.tags }}\`"
+            echo
+            echo "## How to run"
+            echo
+            echo "\`docker pull ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest\`"
+            echo
+            echo "Then run with compose (from this repo):"
+            echo "\`export ODOO_IMAGE=ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest\`"
+            echo "\`docker compose up -d --no-build\`"
+            echo
+            echo "Open: http://localhost:8069"
+          } >> "$GITHUB_STEP_SUMMARY"
