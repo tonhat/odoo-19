@@ -1,0 +1,35 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      uploaded: ${{ steps.upload.outcome }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Upload Pages artifact
+        id: upload
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: 'docs'
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

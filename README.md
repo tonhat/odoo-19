@@ -35,3 +35,12 @@ Developers can start with [the developer tutorials](https://www.odoo.com/documen
 
 If you believe you have found a security issue, check our [Responsible Disclosure page](https://www.odoo.com/security-report)
 for details and get in touch with us via email.
+
+## CI/CD
+
+- **CI**: A GitHub Actions workflow is added at `.github/workflows/ci.yml`. It runs on `push` and `pull_request` for `main`, sets up Python 3.10–3.13, installs dependencies, performs quick import/compile checks and runs tests if present.
+- **Pages**: The static site in the `docs/` directory is deployed to GitHub Pages via `.github/workflows/pages.yml` on pushes to `main`. Enable Pages in your repository settings if needed.
+
+To enable Pages deployment, ensure the repository `main` branch is allowed to deploy and that the `docs/` folder contains your site content (there is an existing `docs/index.html`).
+
+If you need me to push these workflow files to GitHub (or help fix SSH credentials), say so and I will run the commit + push.
