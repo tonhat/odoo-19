@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_init_connect_gpt_prompt" model="ir.actions.client">
+        <field name="name">GPT Prompt Runner</field>
+        <field name="tag">init_connect_gpt_prompt</field>
+    </record>
+
+    <menuitem
+        id="menu_init_connect_gpt_root"
+        name="GPT Prompt Runner"
+        parent="base.menu_config"
+        sequence="120"
+        action="action_init_connect_gpt_prompt"
+        groups="base.group_system"/>
+</odoo>

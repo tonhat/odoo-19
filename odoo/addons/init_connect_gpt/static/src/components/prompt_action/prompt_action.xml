@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="init_connect_gpt.PromptAction" owl="1">
+        <div class="o_init_connect_gpt_prompt o_main_content">
+            <div class="o_control_panel">
+                <div class="o_cp_top">
+                    <div class="o_cp_top_left">
+                        <h2 class="o_prompt_title">GPT Prompt Runner</h2>
+                    </div>
+                    <div class="o_cp_top_right">
+                        <button class="btn btn-primary" t-on-click="onSend" t-att-disabled="state.loading || !state.prompt">
+                            Send Prompt
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="o_prompt_grid">
+                <div class="o_prompt_panel">
+                    <!-- <label class="o_form_label">System Prompt (optional)</label>
+                    <textarea class="form-control" t-model="state.system" rows="4" placeholder="You are an expert Python developer for Odoo..."></textarea> -->
+
+                    <label class="o_form_label">User Prompt</label>
+                    <textarea class="form-control" t-model="state.prompt" rows="8" placeholder="Describe what you want in natural language..."></textarea>
+                </div>
+
+                <div class="o_prompt_panel">
+                    <label class="o_form_label">Response</label>
+                    <textarea class="form-control o_code_area" t-model="state.response" rows="18" placeholder="Response will appear here..."></textarea>
+
+                    <t t-if="state.error">
+                        <div class="alert alert-danger mt16" role="alert">
+                            <t t-esc="state.error"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
