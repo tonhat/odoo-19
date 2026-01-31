@@ -54,7 +54,7 @@ COPY --chown=odoo:odoo setup.py setup.cfg MANIFEST.in PKG-INFO /opt/odoo/
 
 # Install the local Odoo package so addons paths and data files are resolvable
 # consistently (prevents missing base/data/base_data.sql at runtime).
-RUN pip install -e .
+RUN pip install --no-deps -e .
 
 # Runtime config + entrypoint
 COPY docker/odoo.conf /etc/odoo/odoo.conf
