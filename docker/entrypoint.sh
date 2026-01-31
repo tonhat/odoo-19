@@ -71,7 +71,7 @@ else
       -i web \
       --without-demo=all \
       --stop-after-init \
-      "$@" || true
+      "$@"
   fi
 fi
 
