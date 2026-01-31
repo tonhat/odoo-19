@@ -1,20 +1,14 @@
-# Plan (pseudocode)
-# 1) Open the GitHub Actions workflow that defines the "test" job (likely .github/workflows/ci.yml or tests.yml).
-# 2) Find the matrix that includes Python "3.1" (or "3.1.x") and remove it (it's EOL and not available on ubuntu-24.04 via setup-python).
-# 3) Keep only supported versions (e.g., 3.10–3.13) or whatever your project supports.
-# 4) Set matrix.fail-fast = false so one failing entry doesn't cancel the rest.
-# 5) Ensure actions/setup-python uses `python-version: ${{ matrix.python-version }}`.
-
-# filepath: .github/workflows/ci.yml
 name: CI
 
 on:
   push:
+    branches: [ main ]
   pull_request:
+    branches: [ main ]
 
 jobs:
-  test:
-    runs-on: ubuntu-24.04
+  sanity:
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +21,33 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      # ...existing code...
-      # e.g. install deps + run tests
-      # - run: pip install -r requirements.txt
-      # - run: pytest
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-py${{ matrix.python-version }}-pip-${{ hashFiles('**/requirements.txt', '**/setup.py') }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential \
+            libpq-dev \
+            libldap2-dev \
+            libsasl2-dev \
+            libssl-dev \
+            libffi-dev \
+            libjpeg-dev \
+            zlib1g-dev
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -e .
+
+      - name: Sanity checks
+        run: |
+          python -m compileall odoo
+          python -c "import odoo; print('odoo import ok')"
+          python -m pip check
