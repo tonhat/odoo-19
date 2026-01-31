@@ -1,0 +1,6 @@
+# CI-only constraints for Python 3.10
+#
+# Odoo's requirements.txt pins gevent==21.8.0 for Python 3.10.
+# That gevent version is not compatible with Cython 3.x and fails to build with:
+#   undeclared name not builtin: long
+Cython<3
