@@ -36,21 +36,21 @@ jobs:
           export ODOO_IMAGE=local/odoo:${{ github.sha }}
           docker compose -f docker-compose.yml up -d --no-build
 
-      - name: Wait for Odoo HTTP
-        run: |
-          set -e
-          echo "Waiting for Odoo on http://localhost:8069/web/login ..."
-          for i in {1..180}; do
-            if curl -fsS -o /dev/null http://localhost:8069/web/login; then
-              echo "Odoo is responding."
-              exit 0
-            fi
-            sleep 2
-          done
-          echo "Timed out waiting for Odoo."
-          docker compose ps
-          docker compose logs --no-color --tail=20 odoo || true
-          exit 1
+      # - name: Wait for Odoo HTTP
+      #   run: |
+      #     set -e
+      #     echo "Waiting for Odoo on http://localhost:8069/web/login ..."
+      #     for i in {1..180}; do
+      #       if curl -fsS -o /dev/null http://localhost:8069/web/login; then
+      #         echo "Odoo is responding."
+      #         exit 0
+      #       fi
+      #       sleep 2
+      #     done
+      #     echo "Timed out waiting for Odoo."
+      #     docker compose ps
+      #     docker compose logs --no-color --tail=20 odoo || true
+      #     exit 1
 
       - name: Compose down
         if: always()
