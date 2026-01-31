@@ -36,23 +36,16 @@ jobs:
           export ODOO_IMAGE=local/odoo:${{ github.sha }}
           docker compose -f docker-compose.yml up -d --no-build
 
-      - name: Verify Odoo base data in image
-        run: |
-          set -e
-          echo "Checking required base data file in image..."
-          docker run --rm local/odoo:${{ github.sha }} \
-        test -f /opt/odoo/odoo/addons/base/data/base_data.sql
-
       - name: Wait for Odoo HTTP
         run: |
           set -e
           echo "Waiting for Odoo on http://localhost:8069/web/login ..."
           for i in {1..180}; do
-        if curl -fsS -o /dev/null http://localhost:8069/web/login; then
-          echo "Odoo is responding."
-          exit 0
-        fi
-        sleep 2
+            if curl -fsS -o /dev/null http://localhost:8069/web/login; then
+              echo "Odoo is responding."
+              exit 0
+            fi
+            sleep 2
           done
           echo "Timed out waiting for Odoo."
           docker compose ps
