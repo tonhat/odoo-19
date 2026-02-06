@@ -14,13 +14,10 @@ shift || true
 # Keep `base` and `web` so the web UI (/web/login) is available.
 : "${ODOO_INIT_MODULES:=base,web}"
 
-# Fail fast if the core `base` addon is missing (common when the image was built
+# Fail fast if core base data file is missing (common when the image was built
 # from an incomplete context or addons paths are wrong).
-#
-# NOTE: Some source distributions do not ship `base/data/base_data.sql`, so we
-# validate the presence of the addon manifest instead.
-if [ ! -f "/opt/odoo/odoo/addons/base/__manifest__.py" ]; then
-  echo "ERROR: Missing /opt/odoo/odoo/addons/base/__manifest__.py in container."
+if [ ! -f "/opt/odoo/odoo/addons/base/data/base_data.sql" ]; then
+  echo "ERROR: Missing /opt/odoo/odoo/addons/base/data/base_data.sql in container."
   echo "Debug: printing odoo.addons search paths..."
   python -c "import odoo.addons; import sys; print('sys.path='); print('  ' + '\n  '.join(sys.path)); print('odoo.addons.__path__='); print('  ' + '\n  '.join(list(odoo.addons.__path__)))" || true
   exit 1

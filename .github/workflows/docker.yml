@@ -30,6 +30,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Sanity check required base files
+        run: |
+          test -f odoo/addons/base/data/base_data.sql
+
       - name: Compose up
         run: |
           # Use the locally-built image rather than rebuilding in compose
