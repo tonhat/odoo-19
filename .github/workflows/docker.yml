@@ -21,6 +21,10 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
+      - name: Sanity check required base files
+        run: |
+          test -f odoo/addons/base/data/base_data.sql
+
       - name: Build image (local)
         uses: docker/build-push-action@v6
         with:
@@ -29,10 +33,6 @@ jobs:
           tags: local/odoo:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-      - name: Sanity check required base files
-        run: |
-          test -f odoo/addons/base/data/base_data.sql
 
       - name: Compose up
         run: |
